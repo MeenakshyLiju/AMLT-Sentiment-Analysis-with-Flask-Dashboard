@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entity Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+    <header>
+        <h1>Entity Analysis</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/sentiment">Sentiment Analysis</a></li>
+            <li><a href="/comparison">Model Comparison</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section>
+            <h2>Entity Sentiment Heatmaps</h2>
+            <p>
+                These heatmaps display the sentiment distribution for the most popular entities identified by the models. While both Random Forest and BERT demonstrated consistent accuracy in entity recognition, the sentiment distributions reveal differences between the two models. Random Forest shows a broader distribution across entities with noticeable variations in sentiment proportions, whereas BERT highlights more focused sentiment patterns, particularly for entities like OpenAI and Microsoft. Below, you can explore the sentiment breakdown for each entity as predicted by both models.
+            </p>
+            <!-- Random Forest Heatmap -->
+            <div>
+                <h3>Random Forest Entity Sentiment Heatmap</h3>
+                <div class="chart-container" style="width: 800px; height: 500px; margin: 0 auto;">
+                    <canvas id="rf-heatmap-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- BERT Heatmap -->
+            <div>
+                <h3>BERT Entity Sentiment Heatmap</h3>
+                <div class="chart-container" style="width: 800px; height: 500px; margin: 0 auto;">
+                    <canvas id="bert-heatmap-chart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p> </p>
+    </footer>
+
+    <script>
+        // Random Forest Data passed from app.py
+        const rfHeatmapData = JSON.parse('{{ rf_heatmap_data | safe }}');
+
+        // Transform data for RF heatmap
+        const rfLabels = Object.keys(rfHeatmapData);
+        const rfSentiments = ["bad", "neutral", "good"];
+        const rfData = rfSentiments.map(sentiment => 
+            rfLabels.map(entity => rfHeatmapData[entity][sentiment] || 0)
+        );
+
+        // Random Forest Heatmap Configuration
+        const rfCtx = document.getElementById('rf-heatmap-chart').getContext('2d');
+        new Chart(rfCtx, {
+            type: 'bar',
+            data: {
+                labels: rfLabels,
+                datasets: [
+                    { label: 'Bad', data: rfData[0], backgroundColor: '#ff6f61' },
+                    { label: 'Neutral', data: rfData[1], backgroundColor: '#ffcc00' },
+                    { label: 'Good', data: rfData[2], backgroundColor: '#85c1e9' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true, title: { display: true, text: 'Entities' } },
+                    y: { stacked: true, title: { display: true, text: 'Count' } }
+                },
+                plugins: {
+                    title: { display: true, text: 'Random Forest Entity Sentiment Heatmap' },
+                    tooltip: { mode: 'index', intersect: false }
+                }
+            }
+        });
+
+        // BERT Data passed from app.py
+        const bertHeatmapData = JSON.parse('{{ bert_heatmap_data | safe }}');
+
+        // Transform data for BERT heatmap
+        const bertLabels = Object.keys(bertHeatmapData);
+        const bertSentiments = ["bad", "neutral", "good"];
+        const bertData = bertSentiments.map(sentiment => 
+            bertLabels.map(entity => bertHeatmapData[entity][sentiment] || 0)
+        );
+
+        // BERT Heatmap Configuration
+        const bertCtx = document.getElementById('bert-heatmap-chart').getContext('2d');
+        new Chart(bertCtx, {
+            type: 'bar',
+            data: {
+                labels: bertLabels,
+                datasets: [
+                    { label: 'Bad', data: bertData[0], backgroundColor: '#ff6f61' },
+                    { label: 'Neutral', data: bertData[1], backgroundColor: '#ffcc00' },
+                    { label: 'Good', data: bertData[2], backgroundColor: '#85c1e9' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true, title: { display: true, text: 'Entities' } },
+                    y: { stacked: true, title: { display: true, text: 'Count' } }
+                },
+                plugins: {
+                    title: { display: true, text: 'BERT Entity Sentiment Heatmap' },
+                    tooltip: { mode: 'index', intersect: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

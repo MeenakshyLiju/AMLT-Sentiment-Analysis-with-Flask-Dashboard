@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Sentiment Analysis</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/entity">Entity Analysis</a></li>
+            <li><a href="/comparison">Model Comparison</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section>
+            <h2>Sentiment Distribution</h2>
+            <p>This pie chart visualizes the overall sentiment distribution across the dataset.</p>
+            <div class="chart-container" style="width: 500px; height: 500px; margin: 0 auto;">
+                <canvas id="sentiment-chart"></canvas>
+            </div>
+        </section>
+        <section>
+            <h2>Key Insights</h2>
+            <ul>
+                <li>The dataset contains <strong>{{ sentiment_data['bad'] }}</strong> negative sentiments, 
+                    accounting for the majority of overall sentiments.</li>
+                <li><strong>{{ sentiment_data['good'] }}</strong> entries are classified as positive sentiments, 
+                    indicating a significant amount of optimism.</li>
+                <li>Neutral sentiments make up <strong>{{ sentiment_data['neutral'] }}</strong>, reflecting balanced opinions in the dataset.</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p> </p>
+    </footer>
+
+    <script>
+        // Data passed from Flask
+        const sentimentData = JSON.parse('{{ sentiment_data | safe }}');
+
+        // Prepare data for the Pie Chart
+        const labels = Object.keys(sentimentData);
+        const data = Object.values(sentimentData);
+
+        // Pie Chart Configuration
+        const ctx = document.getElementById('sentiment-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['#ff6f61', '#85c1e9', '#ffcc00'], // Colors for bad, good, and neutral
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Overall Sentiment Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

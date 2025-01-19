@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styling specific to Model Comparison */
+        .metrics-chart {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .confusion-matrix-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .confusion-matrix-container .chart-wrapper {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Model Comparison</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/sentiment">Sentiment Analysis</a></li>
+            <li><a href="/entity">Entity Analysis</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- Evaluation Metrics Section -->
+        <section>
+            <h2>Evaluation Metrics</h2>
+            <div class="chart-container metrics-chart">
+                <canvas id="metrics-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Confusion Matrices Section -->
+        <section>
+            <h2>Confusion Matrices</h2>
+            <div class="confusion-matrix-container">
+                <div class="chart-wrapper">
+                    <h3>Random Forest Confusion Matrix</h3>
+                    <canvas id="rf-confusion-matrix"></canvas>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>BERT Confusion Matrix</h3>
+                    <canvas id="bert-confusion-matrix"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p> </p>
+    </footer>
+
+    <script>
+        // Evaluation Metrics Data
+        const metricsData = JSON.parse('{{ metrics_data | safe }}');
+        const ctx = document.getElementById('metrics-chart').getContext('2d');
+        const labels = metricsData.map(item => item.Metric);
+        const randomForestData = metricsData.map(item => item['Random Forest']);
+        const bertData = metricsData.map(item => item['BERT']);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Random Forest', data: randomForestData, backgroundColor: '#5b9aa0' },
+                    { label: 'BERT', data: bertData, backgroundColor: '#a8d8ea' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+            }
+        });
+
+        // Confusion Matrices Data
+        const confusionMatrixData = JSON.parse('{{ confusion_matrix_data | safe }}');
+
+        // Random Forest Confusion Matrix
+        const rfCtx = document.getElementById('rf-confusion-matrix').getContext('2d');
+        new Chart(rfCtx, {
+            type: 'bar',
+            data: {
+                labels: ['True Negative', 'False Positive', 'False Negative', 'True Positive'],
+                datasets: [{
+                    label: 'Random Forest Confusion Matrix',
+                    data: confusionMatrixData.RandomForest.flat(),
+                    backgroundColor: '#5b9aa0'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+            }
+        });
+
+        // BERT Confusion Matrix
+        const bertCtx = document.getElementById('bert-confusion-matrix').getContext('2d');
+        new Chart(bertCtx, {
+            type: 'bar',
+            data: {
+                labels: ['True Negative', 'False Positive', 'False Negative', 'True Positive'],
+                datasets: [{
+                    label: 'BERT Confusion Matrix',
+                    data: confusionMatrixData.BERT.flat(),
+                    backgroundColor: '#a8d8ea'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+            }
+        });
+    </script>
+</body>
+</html>
