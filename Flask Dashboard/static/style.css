@@ -1,0 +1,64 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafc;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #5b9aa0;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #5b9aa0; /* Muted pastel blue */
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+nav ul {
+    list-style-type: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex; /* Make navigation horizontal */
+    justify-content: center; /* Center the items */
+    align-items: center;
+}
+
+nav li {
+    margin: 0 15px; /* Add spacing between menu items */
+}
+
+nav a {
+    text-decoration: none; /* Remove underline */
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px; /* Optional: Rounded corners */
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #a8d8ea; /* Light blue hover effect */
+    color: #333; /* Change text color on hover */
+}
+
+/* Footer */
+footer {
+    background-color: #5b9aa0;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Section Styling */
+main {
+    text-align: center;
+    padding: 2rem;
+}
