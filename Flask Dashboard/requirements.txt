@@ -1,0 +1,9 @@
+flask
+pandas
+matplotlib
+seaborn
+spacy
+transformers
+torch
+textblob
+plotly
