@@ -1,0 +1,25 @@
+Entity,Sentiment,Count
+openai,neutral,16677
+google,neutral,8816
+openai,good,6158
+artificial intelligence,neutral,2301
+openai,bad,2162
+google,good,2132
+google,bad,1821
+elon musk,neutral,700
+artificial intelligence,good,698
+stack overflow,neutral,552
+stack overflow,bad,352
+microsoft,neutral,350
+artificial intelligence,bad,174
+sam altman,neutral,139
+elon musk,good,133
+microsoft,good,105
+elon musk,bad,103
+stack overflow,good,87
+quantum computing,neutral,45
+microsoft,bad,41
+sam altman,good,22
+quantum computing,good,9
+sam altman,bad,8
+quantum computing,bad,2

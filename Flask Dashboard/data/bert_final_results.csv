@@ -1,0 +1,2 @@
+accuracy,precision,recall,f1_score,confusion_matrix
+1.0,1.0,1.0,1.0,"[[143592, 0], [0, 69246]]"
